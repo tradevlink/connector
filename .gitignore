@@ -1,0 +1,17 @@
+# Build directories
+build/
+dist/
+
+# Config files
+config.json
+
+# PyInstaller spec files
+*.spec
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+server.crt
+server.key

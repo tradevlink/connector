@@ -1,0 +1,85 @@
+{
+    "license_key": "",
+    "user": {
+        "type": 0,
+        "ws_url": "wss://api.tradevlink.com",
+        "expiration_timestamp": 0
+    },
+    "listen_to_alerts": true,
+    "show_seconds_in_log": true,
+    "save_log": true,
+    "discord_webhook_url": "",
+    "discord_message_alerts": false,
+    "discord_message_errors": false,
+    "start_mt5": true,
+    "flask": {
+        "host": "127.0.0.1",
+        "port": 5000,
+        "use_ssl": false,
+        "certfile": "",
+        "keyfile": ""
+    },
+    "alert_rules": [
+        {
+            "symbol": "XAUUSD",
+            "volume": 0.01,
+            "volume_from_alert": false,
+            "take_profit": 0.00,
+            "stop_loss": 0.00,
+            "profit_trailing_stop": 0.00,
+            "close_positions_on_entry": true,
+            "active_schedule": true,
+            "schedule": [
+                {
+                    "day": "Monday",
+                    "active": true,
+                    "pause_start": "21:30",
+                    "pause_duration": "03:00",
+                    "close_positions_on_pause": true
+                },
+                {
+                    "day": "Tuesday",
+                    "active": true,
+                    "pause_start": "21:30",
+                    "pause_duration": "03:00",
+                    "close_positions_on_pause": true
+                },
+                {
+                    "day": "Wednesday",
+                    "active": true,
+                    "pause_start": "21:30",
+                    "pause_duration": "03:00",
+                    "close_positions_on_pause": true
+                },
+                {
+                    "day": "Thursday",
+                    "active": true,
+                    "pause_start": "21:30",
+                    "pause_duration": "03:00",
+                    "close_positions_on_pause": true
+                },
+                {
+                    "day": "Friday",
+                    "active": true,
+                    "pause_start": "21:30",
+                    "pause_duration": "03:00",
+                    "close_positions_on_pause": true
+                },
+                {
+                    "day": "Saturday",
+                    "active": true,
+                    "pause_start": "21:30",
+                    "pause_duration": "03:00",
+                    "close_positions_on_pause": true
+                },
+                {
+                    "day": "Sunday",
+                    "active": true,
+                    "pause_start": "21:30",
+                    "pause_duration": "03:00",
+                    "close_positions_on_pause": true
+                }   
+            ]
+        }
+    ]
+}
