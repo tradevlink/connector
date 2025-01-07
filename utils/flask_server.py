@@ -22,7 +22,7 @@ class FlaskServer:
         # Define routes
         @self.app.route('/', methods=['GET'])
         def home():
-            return jsonify({"status": "running"})
+            return jsonify({"status": "running TradevLink server"})
             
         @self.app.route('/alert/<license_key>', methods=['POST'])
         def alert(license_key):
