@@ -756,12 +756,15 @@ class SettingsWindow(ctk.CTkToplevel):
         if port:
             try:
                 port = int(port)
+                if not (0 <= port <= 65535):
+                    raise ValueError("Port number must be between 0 and 65535")
                 flask_config = self.config.get("flask", {})
                 flask_config["port"] = port
                 self.config.set("flask", flask_config)
                 self.config.save_config()
-            except ValueError:
-                messagebox.showerror("Invalid Port", "Port must be a valid number")
+            except ValueError as e:
+                error_message = str(e) if "Port number must be between" in str(e) else "Port must be a valid number"
+                messagebox.showerror("Invalid Port", error_message)
                 # Restore previous value
                 flask_config = self.config.get("flask", {})
                 port = flask_config.get("port", "")
