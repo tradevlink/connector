@@ -18,6 +18,7 @@ class FlaskServer:
         self.error_queue = queue.Queue()
         self.main_frame = None  # Will be set by the app
         self.config = None  # Will be set by the app
+        self._is_running = False
         
         # Define routes
         @self.app.route('/', methods=['GET'])
@@ -82,34 +83,55 @@ class FlaskServer:
                 return jsonify({"error": str(e)}), 500
     
     def start(self):
+        if self._is_running:
+            raise RuntimeError(f"Server is already running on {self.host}:{self.port}")
+
+        # Try to bind to the port first, before starting the thread
+        ssl_context = None
+        if self.use_ssl and self.certfile and self.keyfile:
+            if not os.path.exists(self.certfile) or not os.path.exists(self.keyfile):
+                raise FileNotFoundError("SSL certificate or key file not found")
+            ssl_context = (self.certfile, self.keyfile)
+
+        # Test if port is available
+        import socket
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.bind((self.host, self.port))
+        except OSError as e:
+            raise OSError(f"Port {self.port} is already in use. Please choose a different port.")
+        finally:
+            sock.close()
+
         def run_server():
             try:
-                ssl_context = None
-                if self.use_ssl and self.certfile and self.keyfile:
-                    if not os.path.exists(self.certfile) or not os.path.exists(self.keyfile):
-                        raise FileNotFoundError("SSL certificate or key file not found")
-                    ssl_context = (self.certfile, self.keyfile)
-                
                 self.server = make_server(self.host, self.port, self.app, ssl_context=ssl_context)
+                self._is_running = True
                 self.server.serve_forever()
             except Exception as e:
+                self._is_running = False
                 self.error_queue.put(e)
                 return
-        
+    
         self.server_thread = threading.Thread(target=run_server)
         self.server_thread.daemon = True
         self.server_thread.start()
-        
-        # Wait a short time to check for any startup errors
+    
+        # Wait to check for any startup errors
         try:
-            error = self.error_queue.get(timeout=1.0)
+            error = self.error_queue.get(timeout=2.0)
+            self._is_running = False
             raise error
         except queue.Empty:
             # No error occurred during startup
             pass
-    
+
     def stop(self):
         if self.server:
             self.server.shutdown()
             self.server = None
             self.server_thread = None
+            self._is_running = False
+
+    def is_running(self):
+        return self._is_running
