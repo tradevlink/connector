@@ -16,3 +16,4 @@ __pycache__/
 server.crt
 server.key
 version.txt
+/logs
