@@ -736,7 +736,24 @@ class SettingsWindow(ctk.CTkToplevel):
         self.config.set("discord_message_errors", self.message_errors.get())
         self.config.save_config()
 
+    def _show_server_running_message(self):
+        """Show message that server settings cannot be changed while server is running"""
+        messagebox.showwarning(
+            "Server Running",
+            "Cannot modify server settings while the server is running.\nPlease stop the server first."
+        )
+        
     def _on_host_changed(self, event=None):
+        """Handle host entry changes"""
+        if self.server_running:
+            self._show_server_running_message()
+            # Restore the previous value
+            self.host_entry.delete(0, "end")
+            host = self.config.get("flask", {}).get("host", "")
+            if host:
+                self.host_entry.insert(0, host)
+            return
+        
         host = self.host_entry.get().strip()
         flask_config = self.config.get("flask", {})
         flask_config["host"] = host
@@ -744,6 +761,16 @@ class SettingsWindow(ctk.CTkToplevel):
         self.config.save_config()
 
     def _on_port_changed(self, event=None):
+        """Handle port entry changes"""
+        if self.server_running:
+            self._show_server_running_message()
+            # Restore the previous value
+            self.port_entry.delete(0, "end")
+            port = self.config.get("flask", {}).get("port", "")
+            if port:
+                self.port_entry.insert(0, str(port))
+            return
+            
         port = self.port_entry.get().strip()
         if port:
             try:
@@ -763,15 +790,36 @@ class SettingsWindow(ctk.CTkToplevel):
                 self.port_entry.delete(0, "end")
                 if port:
                     self.port_entry.insert(0, str(port))
-
+                
     def _on_use_ssl_changed(self):
-        flask_config = self.config.get("flask", {})
+        """Handle SSL checkbox changes"""
+        if self.server_running:
+            self._show_server_running_message()
+            # Restore the previous value
+            use_ssl = self.config.get("flask", {}).get("use_ssl", False)
+            if use_ssl:
+                self.use_ssl.select()
+            else:
+                self.use_ssl.deselect()
+            return
+            
         use_ssl = self.use_ssl.get()
+        flask_config = self.config.get("flask", {})
         flask_config["use_ssl"] = use_ssl
         self.config.set("flask", flask_config)
         self.config.save_config()
 
     def _on_cert_changed(self, event=None):
+        """Handle certificate file entry changes"""
+        if self.server_running:
+            self._show_server_running_message()
+            # Restore the previous value
+            self.cert_entry.delete(0, "end")
+            certfile = self.config.get("flask", {}).get("certfile", "")
+            if certfile:
+                self.cert_entry.insert(0, certfile)
+            return
+            
         certfile = self.cert_entry.get().strip()
         flask_config = self.config.get("flask", {})
         flask_config["certfile"] = certfile
@@ -779,6 +827,16 @@ class SettingsWindow(ctk.CTkToplevel):
         self.config.save_config()
 
     def _on_key_changed(self, event=None):
+        """Handle key file entry changes"""
+        if self.server_running:
+            self._show_server_running_message()
+            # Restore the previous value
+            self.key_entry.delete(0, "end")
+            keyfile = self.config.get("flask", {}).get("keyfile", "")
+            if keyfile:
+                self.key_entry.insert(0, keyfile)
+            return
+            
         keyfile = self.key_entry.get().strip()
         flask_config = self.config.get("flask", {})
         flask_config["keyfile"] = keyfile
@@ -1035,6 +1093,10 @@ class SettingsWindow(ctk.CTkToplevel):
                 self.parent.flask_server = None
             except ValueError as e:
                 messagebox.showerror("Error", f"Invalid port number. Please enter a valid number.")
+                self.flask_server = None
+                self.parent.flask_server = None
+            except (OSError, RuntimeError) as e:
+                messagebox.showerror("Error", str(e))
                 self.flask_server = None
                 self.parent.flask_server = None
             except Exception as e:
