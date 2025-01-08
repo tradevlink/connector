@@ -681,23 +681,15 @@ class SettingsWindow(ctk.CTkToplevel):
         self.destroy()
 
     def _mask_license_key(self, key: str) -> str:
-        """Mask the license key, showing only a few characters and preserving dashes."""
+        """Mask the license key, showing only the first and last 4 characters."""
         if not key:
             return "Not Licensed"
-            
-        parts = key.split('-')
-        if len(parts) != 5:  # UUID format should have 5 parts
-            return "X" * len(key)
         
-        # Show first 2 and last 2 chars of first part
-        masked_parts = [
-            f"{parts[0][:2]}{'X' * (len(parts[0])-4)}{parts[0][-2:]}",  # 8 chars
-            "X" * len(parts[1]),  # 4 chars
-            "X" * len(parts[2]),  # 4 chars
-            "X" * len(parts[3]),  # 4 chars
-            f"{parts[4][:2]}{'X' * (len(parts[4])-4)}{parts[4][-2:]}"   # 12 chars
-        ]
-        return "-".join(masked_parts)
+        # Show first 4 and last 4 characters, mask everything else with X's
+        if len(key) <= 8:  # If key is 8 or fewer chars, just return it as is
+            return key
+        else:
+            return f"{key[:4]}{'X' * (len(key)-8)}{key[-4:]}"
 
     def _remove_license(self):
         if messagebox.askyesno("Remove License", "Are you sure you want to remove the license key?", icon='warning'):
