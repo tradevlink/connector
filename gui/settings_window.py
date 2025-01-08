@@ -806,17 +806,21 @@ class SettingsWindow(ctk.CTkToplevel):
                     'use_ssl': use_ssl,
                     'port': port
                 },
-                timeout=5
+                timeout=8
             )
             
+            json_response = response.json()
+
             if response.status_code == 200:
-                json_response = response.json()
                 if json_response.get('success', False):
                     messagebox.showinfo("Success", "The local server can be accessed externally.")
                 else:
                     messagebox.showwarning("Warning", "The local server cannot be accessed externally.")
             else:
-                messagebox.showerror("Error", "Failed to test server connection.")
+                if (json_response.get('message', False)):
+                    messagebox.showerror("Error", json_response['message'])
+                else:
+                    messagebox.showerror("Error", "Failed to test server connection.")
                 
         except Exception as e:
             messagebox.showerror("Error", f"Failed to test server: {str(e)}")
