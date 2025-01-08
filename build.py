@@ -117,6 +117,23 @@ def build():
         PyInstaller.__main__.run(cmd)
         print("Build completed successfully!")
         
+        # Build the launcher
+        print("\nBuilding launcher...")
+        launcher_cmd = [
+            'launcher.py',
+            '--onefile',
+            '--name=TradevLink',
+            f'--icon={os.path.abspath(os.path.join("assets", "logo.ico"))}',
+            '--noconsole',
+            f'--version-file=version.txt',
+        ]
+        PyInstaller.__main__.run(launcher_cmd)
+        
+        # Move the launcher to dist folder
+        launcher_exe = os.path.join('dist', 'TradevLink.exe')
+        if os.path.exists(launcher_exe):
+            print(f"Launcher built successfully at: {launcher_exe}")
+        
     except Exception as e:
         print(f"Build failed: {e}")
         raise
