@@ -53,7 +53,7 @@ def update_version_file():
         StringStruct(u'FileDescription', u'TradevLink Connector'),
         StringStruct(u'FileVersion', u'{TRADEVLINK_VERSION}'),
         StringStruct(u'InternalName', u'TradevLink Connector'),
-        StringStruct(u'LegalCopyright', u'Copyright (c) 2024 TradevLink'),
+        StringStruct(u'LegalCopyright', u'Copyright (c) 2025 TradevLink'),
         StringStruct(u'OriginalFilename', u'TradevLink Connector.exe'),
         StringStruct(u'ProductName', u'TradevLink Connector'),
         StringStruct(u'ProductVersion', u'{TRADEVLINK_VERSION}')])
