@@ -117,14 +117,6 @@ def build():
         PyInstaller.__main__.run(cmd)
         print("Build completed successfully!")
         
-        # Create shortcut in dist folder
-        exe_path = os.path.join('dist', 'TradevLink Connector', 'TradevLink Connector.exe')
-        shortcut_path = os.path.join('dist', 'TradevLink Connector.lnk')
-        icon_path = os.path.abspath(os.path.join('assets', 'logo.ico'))
-        if os.path.exists(exe_path):
-            create_shortcut(os.path.abspath(exe_path), os.path.abspath(shortcut_path), icon_path)
-            print(f"Created shortcut at: {shortcut_path}")
-        
     except Exception as e:
         print(f"Build failed: {e}")
         raise
