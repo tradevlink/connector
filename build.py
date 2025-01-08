@@ -122,7 +122,7 @@ def build():
         launcher_cmd = [
             'launcher.py',
             '--onefile',
-            '--name=TradevLink',
+            '--name=TradevLink Connector Launcher',
             f'--icon={os.path.abspath(os.path.join("assets", "logo.ico"))}',
             '--noconsole',
             f'--version-file=version.txt',
