@@ -135,6 +135,11 @@ class TradeFilter:
         Returns:
             bool: True if trade was processed successfully, False otherwise
         """
+        # Check if alerts are enabled in config
+        if not self.config.get("listen_to_alerts", False):
+            self._log_message("Cannot process trade: Alerts are disabled in settings")
+            return False
+
         # Check MT5 connection first
         if not self.mt5_client.is_connected():
             self._log_message("Cannot process trade: Not connected to MT5")
