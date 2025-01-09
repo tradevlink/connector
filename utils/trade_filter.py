@@ -142,7 +142,7 @@ class TradeFilter:
 
         # Check MT5 connection first
         if not self.mt5_client.is_connected():
-            self._log_message("Cannot process trade: Not connected to MT5")
+            self._log_message("Cannot process trade: Not connected to MT5", 'error')
             return False
 
         # Find rule for this symbol
