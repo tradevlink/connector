@@ -314,17 +314,20 @@ class MT5Client:
 
             # Send the modification request
             result = mt5.order_send(request)
-            if result is not None and result.retcode == mt5.TRADE_RETCODE_DONE:
-                # Build modification log message
-                mod_msg = f"Trade #{ticket} modified."
-                if tp_price is not None:
-                    mod_msg += f" TP@{tp_price}"
-                if sl_price is not None:
+            if result is not None:
+                if result.retcode == mt5.TRADE_RETCODE_DONE:
+                    # Build modification log message
+                    mod_msg = f"Trade #{ticket} modified."
+                    if sl_price is not None:
+                        mod_msg += f" SL@{sl_price}"
                     if tp_price is not None:
-                        mod_msg += ","
-                    mod_msg += f" SL@{sl_price}"
-                self._log_message(mod_msg)
-                return True
+                        mod_msg += f" TP@{tp_price}"
+                    self._log_message(mod_msg)
+                    return True
+                else:
+                    self._log_message(f"Error modifying position #{ticket}. Error Code: {result.retcode}", 'error')
+            else:
+                self._log_message(f"Failed to modify position #{ticket}", 'error')
             return False
 
         except Exception as e:
