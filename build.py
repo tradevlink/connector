@@ -101,6 +101,7 @@ def build():
         '--workpath=build',
         '--distpath=dist',
         '--noconfirm',
+        '--contents-directory=.',
         '--add-data=gui;gui',
         '--add-data=utils;utils',
         '--add-data=assets;assets',
