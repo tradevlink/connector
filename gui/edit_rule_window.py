@@ -327,8 +327,8 @@ class EditRuleWindow(ctk.CTkToplevel):
     
     def _validate_symbol_char(self, symbol):
         """Validate each character in the symbol string."""
-        # Only allow ASCII letters (a-z, A-Z), numbers (0-9), dots and minus
-        return ''.join(c for c in symbol if (c.isascii() and c.isalnum()) or c in '.-')
+        # Only allow ASCII letters (a-z, A-Z), numbers (0-9), dots, minus and plus
+        return ''.join(c for c in symbol if (c.isascii() and c.isalnum()) or c in '.-+/')
 
     def _on_symbol_changed(self, event=None):
         """Handle symbol entry changes."""
