@@ -42,9 +42,9 @@ class FlaskServer:
                 if len(parts) not in [2, 3]:
                     return jsonify({"error": "Invalid request format. Expected: symbol,action[,volume]"}), 400
                 
-                # Validate symbol (allow alphanumeric, $, ., -, _)
+                # Validate symbol (allow alphanumeric, $, ., -, _, +, /)
                 symbol = parts[0].strip()
-                if not re.match(r'^[\w\$\.\-]+$', symbol):
+                if not re.match(r'^[\w\$\.\-\_\+/]+$', symbol):
                     return jsonify({"error": "Invalid symbol format"}), 400
                 
                 # Validate action
