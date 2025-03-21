@@ -305,7 +305,7 @@ class AppPeriodicTask(PeriodicTask):
             local_server_running = True
 
         # Determine dot color
-        if mt5_connected and ((is_premium and ws_connected) or not is_premium):
+        if mt5_connected:
             dot_color = "#28a745"  # Green
         else:
             dot_color = "#6c757d"  # Gray
@@ -317,11 +317,11 @@ class AppPeriodicTask(PeriodicTask):
         else:
             status_parts.append("MT5 Not Connected")
 
-        if is_premium:
+        '''if is_premium:
             if ws_connected:
                 status_parts.append("TradevLink Connected")
             else:
-                status_parts.append("Not Connected to TradevLink")
+                status_parts.append("Not Connected to TradevLink")'''
 
         if local_server_running:
             status_parts.append("Local Server")
@@ -369,7 +369,8 @@ class AppPeriodicTask(PeriodicTask):
                 user_type = config.get("user", {}).get("type")
                 ws_url = config.get("user", {}).get("ws_url")
                 
-                if license_key and user_type == 1 and ws_url:
+                # WebSocket from 2025 not available
+                if False and license_key and user_type == 1 and ws_url:
                     # Should have active WebSocket
                     current_time = datetime.now().timestamp()
                     

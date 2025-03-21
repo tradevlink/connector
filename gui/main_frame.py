@@ -29,22 +29,10 @@ class MainFrame(ctk.CTkFrame):
         
         # Load button icons
         image_loader = ImageLoader()
-        explore_icon = image_loader.get_image("explore.png", size=(20, 20))
         settings_icon = image_loader.get_image("settings.png", size=(20, 20))
         delete_icon = image_loader.get_image("delete.png", size=(20, 20))
         
         # Create icon buttons
-        self.explore_button = ctk.CTkButton(
-            self.top_frame,
-            text="",
-            image=explore_icon,
-            width=30,
-            fg_color="transparent",
-            hover_color=("gray75", "gray25"),
-            command=self.show_explore_dialog
-        )
-        self.explore_button.grid(row=0, column=0, padx=5)
-        
         self.settings_button = ctk.CTkButton(
             self.top_frame,
             text="",
@@ -54,7 +42,7 @@ class MainFrame(ctk.CTkFrame):
             hover_color=("gray75", "gray25"),
             command=self._show_settings
         )
-        self.settings_button.grid(row=0, column=1, padx=5)
+        self.settings_button.grid(row=0, column=0, padx=5)
         
         # Middle text area
         self.text_area = ctk.CTkTextbox(
@@ -164,14 +152,6 @@ class MainFrame(ctk.CTkFrame):
         """Show settings window"""
         settings_window = SettingsWindow(self.winfo_toplevel())
         self.wait_window(settings_window)  # Wait for settings window to close
-
-    def show_explore_dialog(self):
-        """Show dialog for explore feature"""
-        messagebox.showinfo(
-            "Coming Soon!",
-            "The Explore feature will be available before Mid 2025 and accessible to all premium licenses.\n\n" +
-            "Stay tuned for updates!"
-        )
 
     def send_webhook(self, message: str, type: str):
         """Send a message to Discord webhook asynchronously.
